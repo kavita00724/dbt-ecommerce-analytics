@@ -1,1 +1,56 @@
+models:
+  - name: customer_lifetime_value
+    description: >
+      One record per customer with aggregated purchase behaviour and CLV segmentation.
+      Joins customer profile data with completed order history to compute revenue,
+      order frequency, and lifespan metrics used for retention strategy.
+    columns:
+      - name: customer_id
+        description: Primary key — unique identifier for each customer.
+        data_tests:
+          - unique
+          - not_null
+      - name: total_revenue
+        description: Sum of sale prices across all completed order items.
+        data_tests:
+          - not_null
+      - name: clv_segment
+        description: Revenue-based segment assigned to each customer.
+        data_tests:
+          - accepted_values:
+              values: ['High Value', 'Mid Value', 'Low Value']
 
+  - name: order_cohort_analysis
+    description: >
+      Monthly cohort retention table showing how many customers from each
+      acquisition cohort returned to purchase in subsequent months.
+      Used to measure retention rates and identify drop-off patterns.
+    columns:
+      - name: cohort_month
+        description: The month in which customers in this cohort were first acquired.
+        data_tests:
+          - not_null
+      - name: months_since_acquisition
+        description: Number of months elapsed since the cohort's acquisition month.
+        data_tests:
+          - not_null
+      - name: retention_rate_pct
+        description: Percentage of the original cohort that purchased in this month.
+
+  - name: product_revenue
+    description: >
+      One record per product with aggregated sales performance metrics.
+      Covers revenue, units sold, gross profit, and margin — enabling
+      merchandising and pricing decisions.
+    columns:
+      - name: product_id
+        description: Primary key — unique identifier for each product.
+        data_tests:
+          - unique
+          - not_null
+      - name: total_revenue
+        description: Sum of sale prices for all completed sales of this product.
+        data_tests:
+          - not_null
+      - name: gross_margin_pct
+        description: Gross profit as a percentage of total revenue.
