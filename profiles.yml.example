@@ -1,0 +1,18 @@
+ecommerce_analytics:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth
+      project: your-gcp-project-id
+      dataset: dbt_yourname
+      threads: 4
+      timeout_seconds: 300
+    prod:
+      type: bigquery
+      method: service-account
+      project: your-gcp-project-id
+      dataset: analytics
+      keyfile: /path/to/service-account.json
+      threads: 4
+      timeout_seconds: 300
