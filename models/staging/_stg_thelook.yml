@@ -1,0 +1,78 @@
+models:
+  - name: stg_orders
+    description: One record per order placed on the platform.
+    columns:
+      - name: order_id
+        description: Primary key for orders.
+        data_tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: Foreign key to stg_customers.
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: status
+        description: Current fulfillment status of the order.
+        data_tests:
+          - accepted_values:
+              values: ['Cancelled', 'Complete', 'Processing', 'Returned', 'Shipped']
+
+  - name: stg_order_items
+    description: One record per line item within an order.
+    columns:
+      - name: order_item_id
+        description: Primary key for order items.
+        data_tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: Foreign key to stg_orders.
+        data_tests:
+          - not_null
+      - name: customer_id
+        description: Foreign key to stg_customers.
+        data_tests:
+          - not_null
+      - name: sale_price
+        description: Actual price paid by the customer for this item.
+        data_tests:
+          - not_null
+
+  - name: stg_customers
+    description: One record per registered customer.
+    columns:
+      - name: customer_id
+        description: Primary key for customers.
+        data_tests:
+          - unique
+          - not_null
+      - name: email
+        description: Customer email address.
+        data_tests:
+          - unique
+          - not_null
+      - name: traffic_source
+        description: Acquisition channel for the customer.
+        data_tests:
+          - accepted_values:
+              values: ['Organic', 'Search', 'Social', 'Email', 'Display']
+
+  - name: stg_products
+    description: One record per product in the catalog.
+    columns:
+      - name: product_id
+        description: Primary key for products.
+        data_tests:
+          - unique
+          - not_null
+      - name: retail_price
+        description: Listed retail price of the product.
+        data_tests:
+          - not_null
+      - name: cost
+        description: Cost of goods for the product.
+        data_tests:
+          - not_null
